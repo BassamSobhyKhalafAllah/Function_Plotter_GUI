@@ -30,7 +30,7 @@ pip install pytest-qt
 ```python3
 python3 Function_Plotter.py
 ```
-* In case of testing, run [test_app.py](test_app.py) file.
+* In case of automated tests, run [Function_Plotter_test.py](Function_Plotter_test.py) file.
 ```python3
-pytest3 test_app.py
+pytest3 Function_Plotter_test.py
 ```

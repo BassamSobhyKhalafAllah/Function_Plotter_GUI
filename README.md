@@ -26,9 +26,9 @@ pip install pytest-qt
 
 ## Usage
 
-* Run [app.py](app.py) file.
+* Run [Function_Plotter.py](Function_Plotter.py) file.
 ```python3
-python3 app.py
+python3 Function_Plotter.py
 ```
 * In case of testing, run [test_app.py](test_app.py) file.
 ```python3

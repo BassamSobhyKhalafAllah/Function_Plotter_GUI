@@ -3,8 +3,8 @@
 ## Introduction
 Python GUI program that plots an arbitrary user-entered function using Pyside2 and Matplotlib
 and Pytest for automated testing
-GUI which is 1.Take a function of x from the user, e.g., 5*x^3 + 2*x.
-             2.Take min and max values of x from the user.
+GUI which is 1)Take a function of x from the user, e.g., 5*x^3 + 2*x.
+             2)Take min and max values of x from the user.
 
 <p align="center">
   <img height="300" src="function_plotted.png">

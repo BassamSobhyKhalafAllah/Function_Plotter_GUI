@@ -1,16 +1,17 @@
-# pylint: disable=import-error
-#!/usr/bin/env python3
 """
 Created on Mon Jul 10 16:19:15 2023
-test_version_4
-@author: bassamsobhy
+Function-Plotter-version4
+@author: bassamsobhykhalafallah
 """
+
+# Import necessary lib.
 import sys
 from PySide2.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
 
+# Define a custom MainWindow class that inherits from QMainWindow
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -59,20 +60,25 @@ class MainWindow(QMainWindow):
 
         # Validate the user input
         if not func_str:
+            # If the function edit box is empty, clear the canvas and display an error message
             self.canvas.figure.clear()
             self.canvas.draw()
-            self.display_error_message("Please enter a function of x.")
+            self.display_error_message(
+                "Please enter a Plynomial function of x.")
             return
         try:
+            # Try to convert the min and max x values to floats and generate an array of x values
+            # Then, evaluate the function for each x value and plot the result
             x_min = float(x_min_str)
             x_max = float(x_max_str)
             x = np.linspace(x_min, x_max, 1000)
             y = eval(func_str.replace('^', '**'))
         except:
+            # If there was an error in the user input, clear the canvas and display an error message
             self.canvas.figure.clear()
             self.canvas.draw()
             self.display_error_message(
-                "Please enter valid values for the min and max values of x.")
+                "Please enter valid values for the min and max values of x. or check the function")
             return
 
         # Plot the function using Matplotlib
@@ -84,8 +90,11 @@ class MainWindow(QMainWindow):
         self.canvas.draw()
 
     def display_error_message(self, message):
+        # Create a label to display the error message in red text
         error_label = QLabel(message)
         error_label.setStyleSheet("color: red")
+
+        # Clear the canvas and display the error message
         self.canvas.figure.clear()
         self.canvas.draw()
         vbox = self.centralWidget().layout()
@@ -93,7 +102,10 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == '__main__':
+    # Create a Qt application instance and a main window object
     app = QApplication(sys.argv)
     main_window = MainWindow()
+
+    # Show the main window and start the Qt event loop
     main_window.show()
     sys.exit(app.exec_())

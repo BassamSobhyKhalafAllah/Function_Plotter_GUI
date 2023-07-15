@@ -7,18 +7,18 @@ GUI which is 1)Take a function of x from the user, e.g., 5*x^3 + 2*x.
              2)Take min and max values of x from the user.
 
 <p align="center">
-  <img height="300" src="function_plotted.png">
+  <img height="300" src="Imgs/example0.png">
 </p>
 
-## Requirments
-* App requirments 
+## Dependencies
+* For the program 
 ```python3
 pip install PySide2
 pip install numpy
 pip install matplotlib
 pip install os-sys
 ```
-* Testing Requirments
+* For Automated tests
 ```python3
 pip install pytest
 pip install pytest-qt
@@ -32,5 +32,7 @@ python3 Function_Plotter.py
 ```
 * In case of automated tests, run [Function_Plotter_test.py](Function_Plotter_test.py) file.
 ```python3
-pytest3 Function_Plotter_test.py
+# you should start naming the file by "test_"
+pytest3 test_Function_Plotter.py
+pytest    # or pytest -v
 ```

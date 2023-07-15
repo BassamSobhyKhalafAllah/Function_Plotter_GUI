@@ -33,6 +33,5 @@ python3 Function_Plotter.py
 * In case of automated tests, run [Codes/test_Function_Plotter.py](Codes/test_Function_Plotter.py) file.
 ```python3
 # you should start naming the file by "test_"
-python3 test_Function_Plotter.py
-pytest    # or pytest -v
+pytest test_Function_Plotter.py     # or pytest -v
 ```

@@ -1,49 +1,93 @@
-#!/usr/bin/env python3
-"""
-Created on Mon Jul 10 16:19:15 2023
-fp_v4_test_v1
-@author: bassamsobhy
-"""
 import pytest
-from PySide2.QtWidgets import QApplication
-from fp_v4 import MainWindow
+from PySide2.QtCore import Qt
+from PySide2.QtTest import QTest
+from PySide2.QtWidgets import QApplication , QMainWindow, QPushButton
+from Function_Plotter import MainWindow
+
+# Create a fixture to initialize the QApplication instance
+@pytest.fixture(scope="session")
+def qapp():
+    # Check if QApplication instance already exists
+    app = QApplication.instance()
+    if not app:
+        # If not, create a new QApplication
+        app = QApplication([])
+    yield app
+    # After the test session, exit the application
+    app.exit()
 
 
+# Create a fixture to set up the application and the main window for testing
 @pytest.fixture
-def app(qtbot):
+def app(qtbot, qapp):
+    # Create a new QApplication instance for each test
     test_app = QApplication([])
+    # Add the main window widget to the qtbot for testing
     qtbot.addWidget(MainWindow())
     return test_app
 
 
-def test_plot_function(app, qtbot):
-    main_window = MainWindow()
-    qtbot.addWidget(main_window)
+# Test case for valid input
+def test_plot_function_valid_input(app, qtbot):
+    # Obtain references to the main window and its widgets
+    main_window = app.topLevelWidgets()[0]
+    func_edit = main_window.func_edit
+    x_min_edit = main_window.x_min_edit
+    x_max_edit = main_window.x_max_edit
+    plot_button = main_window.findChild(QPushButton, "Plot")
+    canvas = main_window.canvas
 
-    # Test invalid input
-    main_window.func_edit.setText("")
-    main_window.x_min_edit.setText("0")
-    main_window.x_max_edit.setText("10")
-    qtbot.mouseClick(main_window.findChild(QPushButton, "Plot"), Qt.LeftButton)
-    error_label = main_window.centralWidget().findChild(QLabel)
-    assert error_label is not None
-    assert error_label.text() == "Please enter a function of x."
+    # Enter valid input
+    qtbot.keyClicks(func_edit, "5*x^3 + 2*x")
+    qtbot.keyClicks(x_min_edit, "-5")
+    qtbot.keyClicks(x_max_edit, "5")
 
-    main_window.func_edit.setText("sin(x)")
-    main_window.x_min_edit.setText("a")
-    main_window.x_max_edit.setText("b")
-    qtbot.mouseClick(main_window.findChild(QPushButton, "Plot"), Qt.LeftButton)
-    error_label = main_window.centralWidget().findChild(QLabel)
-    assert error_label is not None
-    assert error_label.text() == "Please enter valid values for the min and max values of x."
+    # Click the plot button
+    qtbot.mouseClick(plot_button, Qt.LeftButton)
 
-    # Test valid input
-    main_window.func_edit.setText("sin(x)")
-    main_window.x_min_edit.setText("0")
-    main_window.x_max_edit.setText("10")
-    qtbot.mouseClick(main_window.findChild(QPushButton, "Plot"), Qt.LeftButton)
-    error_label = main_window.centralWidget().findChild(QLabel)
-    assert error_label is None
-    canvas = main_window.findChild(FigureCanvas)
-    assert canvas is not None
+    # Assert that the canvas has been updated
+    assert not canvas.figure.empty
     assert len(canvas.figure.axes) == 1
+
+
+# Test case for invalid input
+def test_plot_function_invalid_input(app, qtbot):
+    # Obtain references to the main window and its widgets
+    main_window = app.topLevelWidgets()[0]
+    func_edit = main_window.func_edit
+    x_min_edit = main_window.x_min_edit
+    x_max_edit = main_window.x_max_edit
+    plot_button = main_window.findChild(QPushButton, "Plot")
+    canvas = main_window.canvas
+
+    # Enter invalid input (empty function)
+    qtbot.keyClicks(func_edit, "")
+
+    # Click the plot button
+    qtbot.mouseClick(plot_button, Qt.LeftButton)
+
+    # Assert that the canvas is empty and error message is displayed
+    assert canvas.figure.empty
+    assert len(canvas.figure.axes) == 0
+    assert main_window.centralWidget().findChildren(
+        QLabel)[0].text() == "Please enter a Polynomial function of x."
+
+    # Clear error message
+    main_window.display_error_message("")
+
+    # Enter invalid input (invalid function)
+    qtbot.keyClicks(func_edit, "5*x^3 + a*x")
+
+    # Click the plot button
+    qtbot.mouseClick(plot_button, Qt.LeftButton)
+
+    # Assert that the canvas is empty and error message is displayed
+    assert canvas.figure.empty
+    assert len(canvas.figure.axes) == 0
+    assert main_window.centralWidget().findChildren(QLabel)[0].text(
+    ) == "Please enter valid values for the min and max values of x. or check the function."
+
+
+# Run the tests using pytest
+if __name__ == "__main__":
+    pytest.main()

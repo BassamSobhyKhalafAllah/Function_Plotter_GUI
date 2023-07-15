@@ -26,11 +26,11 @@ pip install pytest-qt
 
 ## Usage
 
-* Run [Function_Plotter.py](Function_Plotter.py) file.
+* Run [Codes/Function_Plotter.py](Codes/Function_Plotter.py) file.
 ```python3
 python3 Function_Plotter.py
 ```
-* In case of automated tests, run [Function_Plotter_test.py](Function_Plotter_test.py) file.
+* In case of automated tests, run [Codes/test_Function_Plotter.py](Codes/test_Function_Plotter.py) file.
 ```python3
 # you should start naming the file by "test_"
 pytest3 test_Function_Plotter.py
